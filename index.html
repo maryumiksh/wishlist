@@ -75,52 +75,7 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdnFscHRnbnBtcGlwZmFlZ2N6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5NzkzMzksImV4cCI6MjA3NDU1NTMzOX0.3-02Ng-2fjhfQnvzA4N2_AY4QAgjMGIiMlfjkjCAY6U";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Local, authoritative list (now with image_url).
-    const WISHLIST = [
-      {
-        id: "sony-wh1000xm5",
-        name: "Sony WH-1000XM5 Headphones",
-        description: "Noise-canceling wireless headphones with premium sound.",
-        product_url: "https://www.sony.com/electronics/headband-headphones/wh-1000xm5",
-        image_url: "https://m.media-amazon.com/images/I/61bJX6pG8RL._AC_SL1500_.jpg"
-      },
-      {
-        id: "kindle-paperwhite",
-        name: "Kindle Paperwhite 8GB",
-        description: "E-reader with adjustable warm light and waterproof design.",
-        product_url: "https://www.amazon.com/kindle-paperwhite",
-        image_url: "https://m.media-amazon.com/images/I/61tuk2LJ30L._AC_SL1000_.jpg"
-      },
-      {
-        id: "fitbit-charge",
-        name: "Fitbit Charge Tracker",
-        description: "Fitness tracker with heart-rate monitoring and GPS.",
-        product_url: "https://www.fitbit.com/global/us/products/trackers/charge",
-        image_url: "https://m.media-amazon.com/images/I/61gI9cYcOZL._AC_SL1500_.jpg"
-      },
-      {
-        id: "lego-architecture",
-        name: "LEGO Architecture Set",
-        description: "Creative building kit inspired by famous landmarks.",
-        product_url: "https://www.lego.com/en-us/themes/architecture",
-        image_url: "https://www.lego.com/cdn/cs/set/assets/blt1e6a7a5d9f2b6a3a/21044.jpg"
-      },
-      {
-        id: "arabic-coffee-set",
-        name: "Arabic Coffee Set (Dallah)",
-        description: "Traditional Arabic dallah set for serving coffee.",
-        product_url: "https://example.com/arabic-coffee-set",
-        image_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Arabic_coffee_pot.jpg/640px-Arabic_coffee_pot.jpg"
-      },
-      {
-        id: "hourglass-makeup-brushes",
-        name: "Hourglass Makeup Brushes",
-        description: "Soft, high-quality brushes for precise makeup application.",
-        product_url: "https://www.hourglasscosmetics.com/collections/brushes",
-        image_url: "https://images.ctfassets.net/4u0n4g9j8kq0/4mV3g1wM7VtGz9WJrU3Wm3/8e5e8c0b1f1e/brushes.jpg"
-      }
-    ];
-
+   
     // --- UI helpers ---
     const grid = document.getElementById('grid');
     const toast = document.getElementById('toast');
@@ -207,44 +162,29 @@
 
     // --- Data layer (Supabase) ---
 
-    async function ensureRowsExist(){
-      // Seed gifts that don’t exist yet
-      const rows = WISHLIST.map(g => ({
-        id: g.id,
-        name: g.name,
-        description: g.description || '',
-        product_url: g.product_url,
-        image_url: g.image_url || null
-      }));
+   async function ensureRowsExist(){
+  // If you want to allow inserting new rows manually, do it from Supabase dashboard
+  return;
+}
 
-      const { error } = await supabase
-        .from('gifts')
-        .upsert(rows, { onConflict: 'id', ignoreDuplicates: true });
+   async function fetchGifts(){
+  const { data, error } = await supabase
+    .from('gifts')
+    .select('id,name,description,product_url,image_url,reserved');
 
-      if (error) console.error('upsert error', error);
-    }
-
-    async function fetchGifts(){
-      const { data, error } = await supabase
-        .from('gifts')
-        .select('id,name,description,product_url,image_url,reserved');
-
-      if (error){
-        console.error(error);
-        showToast('Failed to load gifts', true);
-        return [];
-      }
-
-      // Local values are authoritative if provided
-      const mapLocal = Object.fromEntries(WISHLIST.map(g => [g.id, g]));
-      return data.map(row => ({
-        id: row.id,
-        name: mapLocal[row.id]?.name || row.name,
-        description: mapLocal[row.id]?.description ?? row.description ?? '',
-        product_url: mapLocal[row.id]?.product_url || row.product_url,
-        image_url: mapLocal[row.id]?.image_url || row.image_url,
-        reserved: !!row.reserved
-      }));
+  if (error){
+    console.error(error);
+    showToast('Failed to load gifts', true);
+    return [];
+  }
+  return data.map(row => ({
+    id: row.id,
+    name: row.name,
+    description: row.description || '',
+    product_url: row.product_url,
+    image_url: row.image_url,
+    reserved: !!row.reserved
+  }));
     }
 
     async function reserveGift(id){
@@ -286,3 +226,4 @@
   </script>
 </body>
 </html>
+
