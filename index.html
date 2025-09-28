@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Gift Wishlist</title>
+  <title>Birthday Gift Wishlist</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0f1220; --card:#171a2b; --muted:#9aa4b2; --text:#e8ecf1; --accent:#7c5cff; --accent-2:#22c55e; --danger:#ef4444;
+      --bg:#0f1220; --card:#10217e; --muted:#9aa4b2; --text:#e8ecf1; --accent:#7c5cff; --accent-2:#22c55e; --danger:#ef4444;
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0d1020,#12162a 40%,#0d1020);color:var(--text);}
@@ -19,13 +19,13 @@
     .container{max-width:1050px;margin:0 auto;padding:20px}
     .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
     .card{background:radial-gradient(120% 120% at 10% 0%,#1b1f36 0%,#12162a 60%);border:1px solid #23273d;border-radius:18px;overflow:hidden;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    .card img{width:100%;height:200px;object-fit:cover;display:block;}
     .content{padding:14px 14px 16px}
-    .title{font-weight:600;font-size:16px;line-height:1.35;margin:0 0 10px}
-    .actions{display:flex;gap:8px}
-    button{cursor:pointer;border:0;border-radius:12px;padding:10px 12px;font-weight:600;font-size:14px}
+    .title{font-weight:600;font-size:16px;line-height:1.35;margin:0 0 8px}
+    .desc{color:var(--muted);font-size:14px;line-height:1.45;margin:0 0 12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{cursor:pointer;border:0;border-radius:12px;padding:10px 12px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
     .reserve{background:var(--accent);color:white}
-    .view{background:#26304a;color:#dfe6f3}
+    .link{background:#26304a;color:#dfe6f3}
     .reserved-badge{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#1e293b,#111827);color:#cbd5e1;border:1px solid #334155;padding:6px 8px;border-radius:10px;font-size:12px;display:flex;gap:6px;align-items:center}
     .reserved-badge:before{content:"✔";color:var(--accent-2);font-weight:700}
     .footer-note{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
@@ -33,11 +33,10 @@
     .dlg-h{padding:14px 16px;border-bottom:1px solid #23273d;font-weight:700}
     .dlg-c{padding:16px}
     .dlg-f{display:flex;gap:10px;justify-content:flex-end;padding:12px 16px;border-top:1px solid #23273d}
-    .btn-cancel{background:#26304a;color:#dfe6f3}
-    .btn-yes{background:var(--accent-2);color:#04110a}
+    .btn-cancel{background:#26304a;color:#dfe6f3;border:0;border-radius:12px;padding:10px 12px;font-weight:600;font-size:14px}
+    .btn-yes{background:var(--accent-2);color:#04110a;border:0;border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px}
     .toast{position:fixed;inset:auto 12px 12px auto;background:#0b1220;color:#e5e7eb;border:1px solid #1f2a44;border-radius:12px;padding:10px 14px;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;display:none}
     .toast.error{border-color:#3b1f2a}
-    .hide{display:none}
     .topbar{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px auto 0}
     .pill{background:#1a2036;border:1px solid #2a3350;border-radius:999px;padding:8px 12px;font-size:12px;color:#b7c2d5}
   </style>
@@ -76,20 +75,43 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // 1) Configure your Supabase project
-    // 👉 Replace these two with your actual project credentials
-    const SUPABASE_URL = "https://odvqlptgnpmpipfaegcz.supabase.co"; // e.g., https://abcxyzcompany.supabase.co
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdnFscHRnbnBtcGlwZmFlZ2N6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5NzkzMzksImV4cCI6MjA3NDU1NTMzOX0.3-02Ng-2fjhfQnvzA4N2_AY4QAgjMGIiMlfjkjCAY6U"; // from Supabase > Project Settings > API
+    const SUPABASE_URL = "https://odvqlptgnpmpipfaegcz.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdnFscHRnbnBtcGlwZmFlZ2N6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5NzkzMzksImV4cCI6MjA3NDU1NTMzOX0.3-02Ng-2fjhfQnvzA4N2_AY4QAgjMGIiMlfjkjCAY6U";
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // 2) Define your gifts here (you can edit/extend this list).
-    // id must be unique (slug-like). image can be external URL.
+    // 2) Define gifts locally (authoritative for name/description/product_url)
     const WISHLIST = [
-      { id: "sony-wh1000xm5", name: "Sony WH‑1000XM5 Headphones", image: "https://images.unsplash.com/photo-1518441902110-d2e0a4b9b7e1?q=80&w=1200&auto=format&fit=crop" },
-      { id: "kindle-paperwhite", name: "Kindle Paperwhite 8GB", image: "https://images.unsplash.com/photo-1544937950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop" },
-      { id: "lego-architecture", name: "LEGO Architecture Set", image: "https://images.unsplash.com/photo-1600267185393-e158a98703de?q=80&w=1200&auto=format&fit=crop" },
-      { id: "fitbit-charge", name: "Fitbit Charge Tracker", image: "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?q=80&w=1200&auto=format&fit=crop" },
-      { id: "arabic-coffee-set", name: "Arabic Coffee Set (Dallah)", image: "https://images.unsplash.com/photo-1604908554032-4599f0d5d7f1?q=80&w=1200&auto=format&fit=crop" }
+      {
+        id: "sony-wh1000xm5",
+        name: "Sony WH-1000XM5 Headphones",
+        description: "Noise-canceling wireless headphones with premium sound.",
+        product_url: "https://www.sony.com/electronics/headband-headphones/wh-1000xm5"
+      },
+      {
+        id: "kindle-paperwhite",
+        name: "Kindle Paperwhite 8GB",
+        description: "E-reader with adjustable warm light and waterproof design.",
+        product_url: "https://www.amazon.com/kindle-paperwhite"
+      },
+      {
+        id: "lego-architecture",
+        name: "LEGO Architecture Set",
+        description: "Creative building kit inspired by famous landmarks.",
+        product_url: "https://www.lego.com/en-us/themes/architecture"
+      },
+      {
+        id: "fitbit-charge",
+        name: "Fitbit Charge Tracker",
+        description: "Fitness tracker with heart-rate monitoring and GPS.",
+        product_url: "https://www.fitbit.com/global/us/products/trackers/charge"
+      },
+      {
+        id: "arabic-coffee-set",
+        name: "Arabic Coffee Set (Dallah)",
+        description: "Traditional Arabic dallah set for serving coffee.",
+        product_url: "https://example.com/arabic-coffee-set"
+      }
     ];
 
     // --- UI helpers ---
@@ -103,23 +125,37 @@
     let pendingGiftId = null;
 
     function showToast(msg, isError=false){
-      toast.textContent = msg; toast.classList.toggle('error', !!isError); toast.style.display='block';
+      toast.textContent = msg;
+      toast.classList.toggle('error', !!isError);
+      toast.style.display='block';
       setTimeout(()=>{ toast.style.display='none'; }, 3000);
     }
 
+    function escapeHtml(s){
+      return s?.replace(/[&<>"']/g, m => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[m])) ?? '';
+    }
+
     function cardHTML(g){
+      const name = escapeHtml(g.name);
+      const desc = escapeHtml(g.description || '');
+      const url  = g.product_url || '#';
+
       return `
       <div class="card" data-id="${g.id}">
-        ${g.reserved ? `<div class=reserved-badge>Reserved</div>` : ''}
-        <img src="${g.image}" alt="${g.name}" loading="lazy" />
+        ${g.reserved ? `<div class="reserved-badge">Reserved</div>` : ''}
         <div class="content">
-          <div class="title">${g.name}</div>
+          <div class="title">${name}</div>
+          <p class="desc">${desc}</p>
           <div class="actions">
-            <button class="view" onclick="window.open('${g.image}','_blank')">View Image</button>
-            <button class="reserve" ${g.reserved? 'disabled' : ''} data-action="reserve">${g.reserved? 'Already reserved' : 'Reserve'}</button>
+            <a class="btn link" href="${url}" target="_blank" rel="noopener">Open product</a>
+            <button class="btn reserve" ${g.reserved ? 'disabled' : ''} data-action="reserve">
+              ${g.reserved ? 'Already reserved' : 'Reserve'}
+            </button>
           </div>
         </div>
-      </div>`
+      </div>`;
     }
 
     function render(list){
@@ -131,7 +167,7 @@
           const name = card.querySelector('.title').textContent;
           dlgText.textContent = `Do you really want to reserve “${name}”?`;
           pendingGiftId = id;
-          if (typeof dlg.showModal === 'function') dlg.showModal(); else alert('Confirm: reserve this gift?');
+          if (typeof dlg.showModal === 'function') dlg.showModal(); else if (confirm(dlgText.textContent)) btnYes.click();
         });
       });
     }
@@ -147,22 +183,45 @@
     // --- Data layer (Supabase) ---
 
     async function ensureRowsExist(){
-      // Upsert any gifts that don’t exist yet. Only id/name/image are written; reserved remains false by default.
-      const rows = WISHLIST.map(g => ({ id:g.id, name:g.name, image_url:g.image }));
-      const { error } = await supabase.from('gifts').upsert(rows, { onConflict: 'id', ignoreDuplicates: true });
+      // Insert any gifts that don’t exist yet (no updates on conflict)
+      const rows = WISHLIST.map(g => ({
+        id: g.id,
+        name: g.name,
+        description: g.description || '',
+        product_url: g.product_url
+      }));
+
+      const { error } = await supabase
+        .from('gifts')
+        .upsert(rows, { onConflict: 'id', ignoreDuplicates: true });
+
       if (error) console.error('upsert error', error);
     }
 
     async function fetchGifts(){
-      const { data, error } = await supabase.from('gifts').select('id,name,image_url,reserved');
-      if (error){ console.error(error); showToast('Failed to load gifts', true); return []; }
-      // Merge with local list to keep names/images from WISHLIST authoritative if you edit them here.
-      const mapLocal = Object.fromEntries(WISHLIST.map(g=>[g.id,g]));
-      return data.map(row=>({ id:row.id, name: mapLocal[row.id]?.name || row.name, image: mapLocal[row.id]?.image || row.image_url, reserved: !!row.reserved }));
+      const { data, error } = await supabase
+        .from('gifts')
+        .select('id,name,description,product_url,reserved');
+
+      if (error){
+        console.error(error);
+        showToast('Failed to load gifts', true);
+        return [];
+      }
+
+      // Merge with local list (local values are authoritative for display)
+      const mapLocal = Object.fromEntries(WISHLIST.map(g => [g.id, g]));
+      return data.map(row => ({
+        id: row.id,
+        name: mapLocal[row.id]?.name || row.name,
+        description: mapLocal[row.id]?.description ?? row.description ?? '',
+        product_url: mapLocal[row.id]?.product_url || row.product_url,
+        reserved: !!row.reserved
+      }));
     }
 
     async function reserveGift(id){
-      // Try to set reserved=true only if currently false. This prevents double-reservations.
+      // Set reserved=true only if currently false
       const { data, error } = await supabase
         .from('gifts')
         .update({ reserved: true, reserved_at: new Date().toISOString() })
@@ -170,8 +229,16 @@
         .eq('reserved', false)
         .select('id,reserved');
 
-      if (error){ console.error(error); showToast('Could not reserve. Try again.', true); return; }
-      if (!data || data.length === 0){ showToast('Someone just reserved this gift before you.', true); await load(); return; }
+      if (error){
+        console.error(error);
+        showToast('Could not reserve. Try again.', true);
+        return;
+      }
+      if (!data || data.length === 0){
+        showToast('Someone just reserved this gift before you.', true);
+        await load();
+        return;
+      }
       showToast('Reserved! Thank you.');
       await load();
     }
@@ -185,7 +252,7 @@
     (async function init(){
       await ensureRowsExist();
       await load();
-      // Live updates: subscribe to real-time changes so everyone sees reservations instantly
+      // Live updates
       try{
         supabase.channel('realtime-gifts')
           .on('postgres_changes', { event: '*', schema: 'public', table: 'gifts' }, load)
@@ -195,4 +262,3 @@
   </script>
 </body>
 </html>
-
