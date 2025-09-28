@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Abrar's Birthday Gift Wishlist</title>
+  <title>Abrar's Gift Wishlist</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -17,10 +17,12 @@
     header h1{margin:0;font-size:clamp(24px,4vw,36px)}
     header p{margin:.35rem 0 0;color:var(--muted)}
     .container{max-width:1050px;margin:0 auto;padding:20px}
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
     .card{background:radial-gradient(120% 120% at 10% 0%,#1b1f36 0%,#12162a 60%);border:1px solid #23273d;border-radius:18px;overflow:hidden;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .thumb{width:100%;height:180px;background:#0b1020;border-bottom:1px solid #23273d}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
     .content{padding:14px 14px 16px}
-    .title{font-weight:600;font-size:16px;line-height:1.35;margin:0 0 8px}
+    .title{font-weight:700;font-size:18px;line-height:1.35;margin:0 0 8px}
     .desc{color:var(--muted);font-size:14px;line-height:1.45;margin:0 0 12px}
     .actions{display:flex;gap:8px;flex-wrap:wrap}
     .btn{cursor:pointer;border:0;border-radius:12px;padding:10px 12px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
@@ -45,7 +47,6 @@
   <header>
     <h1>Abrar's Gift Wishlist</h1>
     <p>Pick a gift you’d like to reserve.</p>
-  
   </header>
 
   <div class="container">
@@ -70,43 +71,53 @@
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // 1) Configure your Supabase project
     const SUPABASE_URL = "https://odvqlptgnpmpipfaegcz.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdnFscHRnbnBtcGlwZmFlZ2N6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5NzkzMzksImV4cCI6MjA3NDU1NTMzOX0.3-02Ng-2fjhfQnvzA4N2_AY4QAgjMGIiMlfjkjCAY6U";
-
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // 2) Define gifts locally (authoritative for name/description/product_url)
+    // Local, authoritative list (now with image_url).
     const WISHLIST = [
       {
         id: "sony-wh1000xm5",
         name: "Sony WH-1000XM5 Headphones",
         description: "Noise-canceling wireless headphones with premium sound.",
-        product_url: "https://www.sony.com/electronics/headband-headphones/wh-1000xm5"
+        product_url: "https://www.sony.com/electronics/headband-headphones/wh-1000xm5",
+        image_url: "https://m.media-amazon.com/images/I/61bJX6pG8RL._AC_SL1500_.jpg"
       },
       {
         id: "kindle-paperwhite",
         name: "Kindle Paperwhite 8GB",
         description: "E-reader with adjustable warm light and waterproof design.",
-        product_url: "https://www.amazon.com/kindle-paperwhite"
-      },
-      {
-        id: "lego-architecture",
-        name: "LEGO Architecture Set",
-        description: "Creative building kit inspired by famous landmarks.",
-        product_url: "https://www.lego.com/en-us/themes/architecture"
+        product_url: "https://www.amazon.com/kindle-paperwhite",
+        image_url: "https://m.media-amazon.com/images/I/61tuk2LJ30L._AC_SL1000_.jpg"
       },
       {
         id: "fitbit-charge",
         name: "Fitbit Charge Tracker",
         description: "Fitness tracker with heart-rate monitoring and GPS.",
-        product_url: "https://www.fitbit.com/global/us/products/trackers/charge"
+        product_url: "https://www.fitbit.com/global/us/products/trackers/charge",
+        image_url: "https://m.media-amazon.com/images/I/61gI9cYcOZL._AC_SL1500_.jpg"
+      },
+      {
+        id: "lego-architecture",
+        name: "LEGO Architecture Set",
+        description: "Creative building kit inspired by famous landmarks.",
+        product_url: "https://www.lego.com/en-us/themes/architecture",
+        image_url: "https://www.lego.com/cdn/cs/set/assets/blt1e6a7a5d9f2b6a3a/21044.jpg"
       },
       {
         id: "arabic-coffee-set",
         name: "Arabic Coffee Set (Dallah)",
         description: "Traditional Arabic dallah set for serving coffee.",
-        product_url: "https://example.com/arabic-coffee-set"
+        product_url: "https://example.com/arabic-coffee-set",
+        image_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Arabic_coffee_pot.jpg/640px-Arabic_coffee_pot.jpg"
+      },
+      {
+        id: "hourglass-makeup-brushes",
+        name: "Hourglass Makeup Brushes",
+        description: "Soft, high-quality brushes for precise makeup application.",
+        product_url: "https://www.hourglasscosmetics.com/collections/brushes",
+        image_url: "https://images.ctfassets.net/4u0n4g9j8kq0/4mV3g1wM7VtGz9WJrU3Wm3/8e5e8c0b1f1e/brushes.jpg"
       }
     ];
 
@@ -117,7 +128,6 @@
     const btnCancel = document.getElementById('btnCancel');
     const btnYes = document.getElementById('btnYes');
     const dlgText = document.getElementById('dlgText');
-
     let pendingGiftId = null;
 
     function showToast(msg, isError=false){
@@ -133,14 +143,33 @@
       }[m])) ?? '';
     }
 
+    function placeholderSVG(){
+      // Lightweight inline placeholder (no external request)
+      return `data:image/svg+xml;charset=UTF-8,` + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="450">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop stop-color="#0b1020" offset="0"/><stop stop-color="#141b34" offset="1"/>
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#g)"/>
+          <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle"
+                fill="#6b7280" font-family="Inter,Arial" font-size="28">No image</text>
+        </svg>`);
+    }
+
     function cardHTML(g){
       const name = escapeHtml(g.name);
       const desc = escapeHtml(g.description || '');
       const url  = g.product_url || '#';
+      const img  = g.image_url || placeholderSVG();
 
       return `
       <div class="card" data-id="${g.id}">
         ${g.reserved ? `<div class="reserved-badge">Reserved</div>` : ''}
+        <div class="thumb">
+          <img src="${img}" alt="${name}" onerror="this.src='${placeholderSVG()}'" />
+        </div>
         <div class="content">
           <div class="title">${name}</div>
           <p class="desc">${desc}</p>
@@ -179,12 +208,13 @@
     // --- Data layer (Supabase) ---
 
     async function ensureRowsExist(){
-      // Insert any gifts that don’t exist yet (no updates on conflict)
+      // Seed gifts that don’t exist yet
       const rows = WISHLIST.map(g => ({
         id: g.id,
         name: g.name,
         description: g.description || '',
-        product_url: g.product_url
+        product_url: g.product_url,
+        image_url: g.image_url || null
       }));
 
       const { error } = await supabase
@@ -197,7 +227,7 @@
     async function fetchGifts(){
       const { data, error } = await supabase
         .from('gifts')
-        .select('id,name,description,product_url,reserved');
+        .select('id,name,description,product_url,image_url,reserved');
 
       if (error){
         console.error(error);
@@ -205,19 +235,19 @@
         return [];
       }
 
-      // Merge with local list (local values are authoritative for display)
+      // Local values are authoritative if provided
       const mapLocal = Object.fromEntries(WISHLIST.map(g => [g.id, g]));
       return data.map(row => ({
         id: row.id,
         name: mapLocal[row.id]?.name || row.name,
         description: mapLocal[row.id]?.description ?? row.description ?? '',
         product_url: mapLocal[row.id]?.product_url || row.product_url,
+        image_url: mapLocal[row.id]?.image_url || row.image_url,
         reserved: !!row.reserved
       }));
     }
 
     async function reserveGift(id){
-      // Set reserved=true only if currently false
       const { data, error } = await supabase
         .from('gifts')
         .update({ reserved: true, reserved_at: new Date().toISOString() })
@@ -244,11 +274,9 @@
       render(list);
     }
 
-    // Initial boot
     (async function init(){
       await ensureRowsExist();
       await load();
-      // Live updates
       try{
         supabase.channel('realtime-gifts')
           .on('postgres_changes', { event: '*', schema: 'public', table: 'gifts' }, load)
@@ -258,4 +286,3 @@
   </script>
 </body>
 </html>
-
